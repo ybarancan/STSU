@@ -17,7 +17,7 @@ We provide support for Nuscenes and Argoverse datasets.
 
 ## Trained Models
 
-Cityscapes trained Deeplabv3 model is at:  https://data.vision.ee.ethz.ch/cany/STSU/deplab.pth
+Cityscapes trained Deeplabv3 model is at:  https://data.vision.ee.ethz.ch/cany/STSU/deeplab.pth
 
 Nuscenes trained Polygon-RNN based model is at:  https://data.vision.ee.ethz.ch/cany/STSU/prnn.pth
 
