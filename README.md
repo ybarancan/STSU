@@ -1,4 +1,4 @@
-Official code for "Structured Bird’s-Eye-View Traffic Scene Understanding from Onboard Images"
+Official code for "Structured Bird’s-Eye-View Traffic Scene Understanding from Onboard Images" (ICCV 2021)
 
 ![The transformer method](method.png)
 
