@@ -23,3 +23,9 @@ Nuscenes trained Polygon-RNN based model is at:  https://data.vision.ee.ethz.ch/
 
 Nuscenes trained Transformer based model is at:  https://data.vision.ee.ethz.ch/cany/STSU/transformer.pth
 
+### Additional Links
+
+Polygon-RNN: https://github.com/fidler-lab/polyrnn-pp
+DETR: https://github.com/facebookresearch/detr
+PINET: https://github.com/koyeongmin/PINet_new
+PON: https://github.com/tom-roddick/mono-semantic-maps
