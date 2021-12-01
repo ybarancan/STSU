@@ -1,0 +1,187 @@
+<html>
+    <head>
+        <title>PolyRNN++ Demo</title>
+        <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+        <meta name="viewport" content="width=device-width" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" href="static/css/main.css">
+        
+        
+        <link rel="stylesheet" type="text/css"  href="intro/introjs.css">
+    </head>
+    <body>
+        <div id='heading'>
+            <!-- <span id = "heading1">PolygonRNN++</span><br> -->
+            <img id = "heading1" src = 'polylogo.png'/></span><br>
+            <span id = "heading2">Interactive Object Annotation with Polygons</span>
+        </div>    
+
+        <div>
+            <table id="help-buttons">
+                <!-- Buttons -->  
+                <tr><td><button class="btn btn-large btn-success" href="javascript:void(0);" onclick="startIntro();">Tutorial</button></td></tr>
+                <tr><td><a id ='downlink' href="#" download><button id='down' type='button' class = 'btn btn-success'>Download <br>Annotation</button></a></td></tr>
+                <tr><td><input type ="file" accept='img/*' id="input" style="display: None"></input></td></tr>         
+                <tr><td><button id='u' type='button' class = 'btn btn-info' onclick="undo()">Undo (u)</button></td></tr>
+                <tr><td><button id='n' type='button' class = 'btn btn-info' onclick="newObject()">New <br>Object (n)</button></td></tr>
+                <tr><td><button id='f' type='button' class = 'btn btn-info' onclick="finishObject()">Finish <br>Object (f)</button></td></tr>
+                <tr><td><button id='d' type='button' class = 'btn btn-info' onclick="discard()">Discard <br>Object (d/del)</button></td></tr>
+                <tr><td><button id='s'  type='button' class = 'btn btn-info' onclick="ggnn()">AI Smooth Poly (s)</button></td></tr>                
+                <tr align="middle">
+                    <!-- Rounded switch -->
+                    <td>
+                        <label class="switch">
+                            <input checked="checked", type="checkbox", id='a', onclick="modeToggle()"> 
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+                </tr> 
+
+                <tr align="middle"><td>AI Assistance (a)</td></tr>
+                <tr id="step4" a align="middle">
+                    <!-- Rounded switch -->
+                    <td>
+                        <label class="switch">
+                            <input checked="checked", type="checkbox", id='g', onclick="ggnnmodeToggle()"> 
+                            <span class="slider round"></span>
+                        </label>
+                    </td>
+                </tr>    
+                <tr align="middle"><td>Use fine polygon (g)</td></tr>
+                <tr><td>
+                    <div class="form-group" id="step1">
+                        <label for="backend">Backend:</label>
+                        <select class="form-control" id="backend">
+                            <option value='localhost:5001'>Cityscapes</option>
+                        </select>
+                    </div>                
+                </td></tr>
+                <tr id = "label"><td>
+                    <label for="label">Label:</label><br>
+                    <input class="form-control", id="input-label" list="labels">
+                    <datalist id="labels">
+                        <option value = "Unknown"></option>
+                    </datalist>
+                </td></tr>
+                <tr><td><button id='submit-label' type='button' class = 'btn btn-info' onclick=changeLabel()>Change Label</button></td></tr>
+            </table>
+
+            <div id="drawing_c">
+                <div id="drawing">
+                    <div  id = "overlay">
+                        <img src = "loader.gif"/>
+                    </div>
+                </div>
+            </div>
+       
+        </div>
+       
+        <div id = 'footer'>
+            <center>
+                <table style='margin: 0.2em 0.2em' id = "ownim">
+                    <tr>
+                        <td>
+                        <center><label for="imgselect">Select/Upload Image:</label></center>
+                        <select class="form-control" id="imgselect">
+                            <option value='test.jpg'>Road</option>
+                            <option value='city1.png'>Cityscapes</option>
+                            <option value='aerial.jpg'>Aerial</option>
+                            <option value='coco.png'>Cluttered Room</option>
+                            <option value='medical.png'>Medical 1</option>
+                            <option value='medical2.jpg'>Medical 2</option>
+                            <option value='medical3.jpg'>Medical 3</option>
+                            <option value='outdoor.jpg'>Outdoor</option>
+                            <option value='washing.png'>Washing Room</option>
+                            <option value='coffee.jpg'>Coffee Shop</option>
+                        </select>
+                        </td>
+                    </tr>
+                    <!--<tr>
+                        <td> 
+                            <input type="text" class="form-control" id="url" placeholder="Enter Image URL"></input>
+                        </td>
+                    </tr>-->         
+                </table>            
+                <table>
+                    </tr>
+                        <!--<td style='padding: 0 0.2em'>
+                            <button id = "submit" type='button', class = 'btn btn-info' onclick="submitURL()"> Submit URL </button>
+                        </td>-->
+                        <td style='padding: 0 0.2em'>
+                            <button id = "u" type='button', class = 'btn btn-info' onclick="clickImageInput()"> Upload Local </button> 
+                        </td>
+                    </tr>
+                </table>
+                <br><br>
+                <table align="center">
+                    <tr><td align='center'>Thanks to NVIDIA, Borealis AI, Amazon and Vector Institute for supporting this demo.</td></tr>                    
+                    <tr><td align='center'>We would also like to thank Masha Shugrina and Maxwell Fang for their help with the tool.</td></tr>
+                    <tr><td align='center'>&copy; University of Toronto</td></tr>
+                </table>
+            </center>
+
+        </div>
+    </body>
+
+    <script type='text/javascript' src="intro/intro.js"> </script>
+    <script type="text/javascript">
+      function startIntro(){
+        var intro = introJs();
+          intro.setOptions({
+            steps: [
+              {
+                element: '#step1',
+                intro: "Select our trained model corresponding to data!<br><br>Cityscapes: Best for self-driving<br><br>City+ADE: Finetuned on general scenes<br><br>Medical: Finetuned on a small medical dataset"
+              },
+              {
+                element: '#drawing_c',
+                intro: "Draw a box with click->release->click!<br>We add an automatic expansion to the box to deal with noisy annotations!"
+              },
+              {
+                element: '#drawing',
+                intro: '<mark><strong>Right Click</strong></mark> on a vertex to delete it. <br><mark><strong>Double Click</strong></mark> on a vertex to add a point! <br>Fix polygon by <mark><strong>dragging a point</strong></mark> to the correct position.<br><strong><mark>Always</strong></mark> correct the <strong><mark>first point that is wrong</strong></mark> in the direction of the coloured edge from the green point.'
+              },
+              {
+                element: '#step4',
+                intro: "If the polygon is almost correct, turn off AI Assistance and make final touches."
+              },
+              {
+                element: '#s',
+                intro: 'Use AI to smooth the polygon!'
+              },
+              {
+                element: '#f',
+                intro: 'Click to finish with the object and enter free mode where you can zoom/pan and edit previous annotations!<br>You can also <strong>download</strong> annotations after annotating!'
+              },
+              {
+                element: '#n',
+                intro: 'Click to annotate a new object!'
+              },
+              {
+                element: '#ownim',
+                intro: 'Try out more diverse preset images/upload your own!'
+              },
+            ]
+          });
+          intro.start();
+      }
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script type='text/javascript', src = "https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.4/svg.min.js"></script>
+    <script type='text/javascript', src = "static/js/svg.draw.js"></script>
+    <script type='text/javascript', src = "static/js/svgpanzoom.js"></script>
+    <script type='text/javascript', src = "static/js/polygon.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-53775284-7"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-53775284-7');
+    </script>
+</html>

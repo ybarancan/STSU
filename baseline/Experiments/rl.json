@@ -1,0 +1,72 @@
+{
+    "exp_dir": "/ais/gobi6/amlan/polygon/polyrnnpp_pytorch/rl_attention_t01_bs16_lr2e-6_decay2",
+    "mode": "train_rl",
+    "temperature": 0.1,
+    "return_attention": true,
+    "train_attention": false,
+    "train_encoder": false,
+    "lr": 2e-6,
+    "lr_decay": 2,
+    "grad_clip": 40,
+    "max_epochs": 20,
+    "max_poly_len": 71,
+    "print_freq": 20,
+    "val_freq": 500,
+    "fp_weight": 200,
+    "dt_threshold": 2,
+    "encoder_reload": "/ais/gobi6/amlan/polygon/polyrnnpp_pytorch/resnet50.pth",
+    "xe_initializer": "/ais/gobi6/amlan/polygon/polyrnnpp_pytorch/full_data_attention_fix_training/checkpoints/epoch9_step49000.pth",
+    "use_bn_lstm": true,
+    "dataset": {
+        "train" : {
+            "data_dir": "/ais/gobi5/davidj/cityscapes_project/polyrnn/myWiki/datasets/cityscapes_final_v5",
+            "batch_size": 16,
+            "num_workers": 8,
+            "min_poly_len": 3,
+            "max_poly_len": 71,
+            "min_area": 100,
+            "sub_th": 0,
+            "grid_side": 28,
+            "img_side": 224,
+            "skip_multicomponent": false,
+            "flip": false,
+            "random_start": true,
+            "random_context": [0.1,0.2],
+            "class_filter": [
+                "car",
+                "truck",
+                "train",
+                "bus",
+                "motorcycle",
+                "bicycle",
+                "rider",
+                "person"
+            ]
+        },
+        "train_val" : {
+            "data_dir": "/ais/gobi5/davidj/cityscapes_project/polyrnn/myWiki/datasets/cityscapes_final_v5",
+            "batch_size": 16,
+            "num_workers": 8,
+            "min_poly_len": 3,
+            "max_poly_len": 71,
+            "min_area": 100,
+            "sub_th": 0,
+            "grid_side": 28,
+            "img_side": 224,
+            "skip_multicomponent": false,
+            "flip": false,
+            "random_start": false,
+            "random_context": [0.15,0.15],
+            "class_filter": [
+                "car",
+                "truck",
+                "train",
+                "bus",
+                "motorcycle",
+                "bicycle",
+                "rider",
+                "person"
+            ]
+        }
+    }
+}

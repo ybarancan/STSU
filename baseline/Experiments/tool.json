@@ -1,0 +1,25 @@
+{
+    "mode": "tool",
+    "max_poly_len": 71,
+    "temperature": 0.0,
+    "use_evaluator": true,
+    "use_bn_lstm": true,
+    "use_ggnn": true,
+    "ggnn_n_steps":5,
+    "ggnn_state_dim":1024,
+    "ggnn_grid_size": 112,
+    "ggnn_output_dim":15,
+    "use_separate_encoder": false,
+    "return_attention": false,
+    "dataset": {
+        "train_val" : {
+            "batch_size": 1,
+            "max_poly_len": 71,
+            "grid_side": 28,
+            "img_side": 224,
+            "flip": false,
+            "random_start": false,
+            "random_context": [0.15,0.15]
+        }
+    }
+}

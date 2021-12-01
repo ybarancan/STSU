@@ -1,0 +1,94 @@
+
+
+logdir: /cluster/work/cvl/cany/lanefinder
+
+train_dataset: nuscenes
+# train_dataset: argoverse
+
+nusc_root: /cluster/scratch/cany/nuScenes
+nuscenes_version: v1.0-trainval
+
+
+argo_log_root: /srv/beegfs02/scratch/tracezuerich/data/datasets/Argoverse_v2/argoverse-tracking/all_logs
+argo_root: /srv/beegfs02/scratch/tracezuerich/data/datasets/Argoverse_v2
+
+argo_seg_label_root: /srv/beegfs02/scratch/tracezuerich/data/cany/argoverse
+
+
+line_label_root: /cluster/scratch/cany/nuscenes_stuff/lines
+
+seg_label_root: /cluster/scratch/cany/nuscenes_stuff/seg_labels
+
+nusc_num_object_class: 10
+
+num_bev_classes: 14
+
+       
+load_pretrained_backbone: False
+backbone_ckpt_path: /cluster/work/cvl/cany/lanefinder/deeplab_model.pth
+load_original_ckpt: False
+        
+     
+loc_dict_path:  /cluster/scratch/cany/nuscenes_stuff/vis_loc_dict.npy
+obj_dict_path:  /cluster/scratch/cany/nuscenes_stuff/obj_dict.npy
+ 
+ 
+argo_obj_dict_path:  /scratch_net/catweazle/cany/lanefinder/argo_obj_dict.npy
+     
+zoom_sampling_dict_path: /cluster/work/cvl/cany/lanefinder/zoom_sampling_dict.npy
+        
+crop_lines: True
+delete_lines: False
+
+# Name of split used for training
+train_split: train
+
+# Name of split used for validation
+val_split: val
+
+# Root data directory 
+
+
+img_size: [800, 448]
+image_size: [800, 448]
+patch_size: [800, 448]
+# Hold out portion of train data to calibrate on
+
+# IDs of GPUs to use during training
+gpus: [0]
+
+batch_size: 1
+
+# Number of dataloader threads
+num_workers: 4
+
+
+tfm_channels: 64
+ymin: -2
+ymax: 4
+focal_length: 1260.
+# Threshold to treat prediction as positive
+
+# Number of epochs to train for
+num_epochs: 200
+
+# Log loss to tensorboard every N iterations
+log_interval: 1000
+
+# Visualise predictions every N iterations
+vis_interval: 1000
+stats_interval: 10
+reset_confusion_interval: 2000
+# Loss function
+
+map_extents: [-25., 1., 25., 50.]
+
+# Spacing between adjacent grid cells in the map, in meters
+map_resolution: 0.25
+resolution: 0.25
+zoom_augment_prob: 0.4
+
+
+rnn_size: [49,50]
+
+polyrnn_feat_side: 50
