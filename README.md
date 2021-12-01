@@ -31,7 +31,7 @@ The implementation of the metrics can be found in src/utils/confusion.py.
 Please refer to the paper for explanations on the metrics.
 
 
-<img src="metrics.png" width="100" height="100">
+<img src="metrics.png" width="400" height="600">
 
 ### Additional Links
 
