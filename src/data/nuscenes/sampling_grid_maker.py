@@ -14,10 +14,6 @@ import numpy as np
 LOCATIONS = ['boston-seaport', 'singapore-onenorth', 'singapore-queenstown',
              'singapore-hollandvillage']
 
-camera_matrix_dict = np.load('C:\\winpy\\WPy64-3850\\codes\\lanefinder_github\\results\\camera_matrix_dict.npy', allow_pickle=True)   
-
-intrinsic_dict = np.load('C:\\winpy\\WPy64-3850\\codes\\lanefinder_github\\results\\intrinsic_dict.npy', allow_pickle=True)   
-
 intrinsic_dict = dict()
 
 intrinsic_dict['boston-seaport'] = np.array([[1.25281310e+03, 0.00000000e+00, 8.26588115e+02],
