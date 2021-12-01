@@ -1,5 +1,7 @@
 Official code for "Structured Bird’s-Eye-View Traffic Scene Understanding from Onboard Images"
 
+![The transformer method](metod_hori_hori.pdf)
+
 
 [Link to paper](https://arxiv.org/pdf/2110.01997.pdf)
 
