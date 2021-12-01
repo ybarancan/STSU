@@ -11,5 +11,15 @@ We provide support for Nuscenes and Argoverse datasets.
 2. Run the make_labels.py file for the dataset you want to use
 3. If you want to use zoom augmentation (only for Nuscenes currently), run src/data/nuscenes/sampling_grid_maker.py (Set the path to save the .npy file in the sampling_grid_maker.py)
 4. You can use train_tr.py for training the transformer based model or train_prnn.py to train the Polygon-RNN based model
-5. Validator files can be used for testing
+5. We recommend using the Cityscapes pretrained Deeplab model (link provided below) as backbone for training your own model
+6. Validator files can be used for testing. The link to trained models are given below.
+
+
+## Trained Models
+
+Cityscapes trained Deeplabv3 model is at:  https://data.vision.ee.ethz.ch/cany/STSU/deplab.pth
+
+Nuscenes trained Polygon-RNN based model is at:  https://data.vision.ee.ethz.ch/cany/STSU/prnn.pth
+
+Nuscenes trained Transformer based model is at:  https://data.vision.ee.ethz.ch/cany/STSU/transformer.pth
 
