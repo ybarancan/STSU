@@ -25,6 +25,13 @@ Nuscenes trained Polygon-RNN based model is at:  https://data.vision.ee.ethz.ch/
 
 Nuscenes trained Transformer based model is at:  https://data.vision.ee.ethz.ch/cany/STSU/transformer.pth
 
+## Metrics
+
+The implementation of the metrics can be found in src/utils/confusion.py.
+Please refer to the paper for explanations on the metrics.
+
+![Metrics figure](metric.png)
+
 ### Additional Links
 
 - Polygon-RNN: https://github.com/fidler-lab/polyrnn-pp
