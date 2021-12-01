@@ -30,7 +30,7 @@ Nuscenes trained Transformer based model is at:  https://data.vision.ee.ethz.ch/
 The implementation of the metrics can be found in src/utils/confusion.py.
 Please refer to the paper for explanations on the metrics.
 
-![Metrics figure](metrics.png | width=100)
+![Metrics figure](metrics.png){:height="700px" width="400px"}
 
 ### Additional Links
 
