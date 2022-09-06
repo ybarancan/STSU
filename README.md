@@ -33,9 +33,21 @@ Please refer to the paper for explanations on the metrics.
 
 <img src="metrics.png" width="350" height="400">
 
+## Additional Results
+
+The method's results without object supervision:
+
+| Metric/Dataset | Nuscenes | Argoverse |
+| -------- | ------------- | ------------- |
+| M-F  | 56.7  | 55.6  |
+| Detection  | 59.9  |60.1  |
+| Assoc C-F  | 55.2  | 54.9 |
+
 ### Additional Links
 
 - Polygon-RNN: https://github.com/fidler-lab/polyrnn-pp
 - DETR: https://github.com/facebookresearch/detr
 - PINET: https://github.com/koyeongmin/PINet_new
 - PON: https://github.com/tom-roddick/mono-semantic-maps
+
+
