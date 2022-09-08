@@ -2,6 +2,8 @@ Official code for "Structured Bird’s-Eye-View Traffic Scene Understanding from
 
 ![The transformer method](method.png)
 
+In this work, we study the problem of extracting a directed graph representing the local road network in BEV coordinates, from a single onboard camera image. Moreover, we show that the method can be extended to detect dynamic objects on the BEV plane. The semantics, locations, and orientations of the detected objects together with the road graph facilitates a comprehensive understanding of the scene.
+
 
 [Link to paper](https://arxiv.org/pdf/2110.01997.pdf)
 
