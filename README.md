@@ -9,6 +9,14 @@ In this work, we study the problem of extracting a directed graph representing t
 
 We provide support for Nuscenes and Argoverse datasets. 
 
+Check out our extension paper
+
+TPLR (CVPR'22): [https://github.com/ybarancan/TopologicalLaneGraph](https://github.com/ybarancan/TopologicalLaneGraph)
+
+Monocular video based BEV segmentation:
+
+BEVFeatStitch (ICRA/RAL'22): [https://github.com/ybarancan/BEV_feat_stitch](https://github.com/ybarancan/BEV_feat_stitch)
+
 ## Steps
 0. Make sure you have installed Nuscenes and/or Argoverse devkits and datasets installed
 1. In configs/deafults.yml file, set the paths
