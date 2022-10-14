@@ -58,7 +58,7 @@ def build_argoverse_datasets(config,args, val=False, pinet=False):
 
       # Create datasets using new argoverse splits
       train_data = ArgoverseMapDataset(config, loaders['train'], am,
-                                       TRAIN_LOGS,  train=True)
+                                       TRAIN_LOGS,  train=True ,work_objects=args.objects)
       val_data = ArgoverseMapDataset(config,loaders['train'], am, 
                                       VAL_LOGS, train=False, pinet=pinet ,work_objects=args.objects )
       
