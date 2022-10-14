@@ -955,7 +955,7 @@ class PostProcess(nn.Module):
             return (results, obj_dict)
     
         else:
-            return results
+            return (results, {})
         
 class MLP(nn.Module):
     """ Very simple multi-layer perceptron (also called FFN)"""
