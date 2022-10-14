@@ -164,7 +164,11 @@ class ArgoverseMapDataset(Dataset):
                 target['obj_corners'] = torch.tensor(obj_to_return).float()
                 target['obj_converted'] = torch.tensor(center_width_orient).float()
                 target['obj_exists'] = torch.tensor(obj_exists)
-            
+            else:
+                target['obj_corners'] = torch.tensor(np.zeros((2,8))).float()
+                target['obj_converted'] = torch.tensor(np.zeros((2,5))).float()
+                target['obj_exists'] = torch.tensor(False)
+                
             target['init_point_matrix'] = torch.tensor(np.copy(np.ascontiguousarray(temp_ar))).float()
             
             
