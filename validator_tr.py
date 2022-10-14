@@ -109,27 +109,27 @@ def evaluate(dataloader, model, criterion, postprocessors, confusion, config,arg
         '''
         OBJECT
         '''
-
-        out_objects = vis_tools.get_selected_objects(object_post , thresh = object_thresh)
-        if args.object_refinement:
+        if args.objects:
+            out_objects = vis_tools.get_selected_objects(object_post , thresh = object_thresh)
+            if args.object_refinement:
+                
+                if out_objects['anything_to_feed']:
+                    refine_logits, refine_out = model.refine_obj_seg(outputs, out_objects, cuda_targets[0]['calib'])
+                      
+                    out_objects['refine_out'] = refine_out
+            if targets[0]['obj_exists']:
+                object_inter_dict, object_idx, object_target_ids = criterion.get_object_interpolated(outputs, cuda_targets, match_object_indices)
+            else:
+                object_inter_dict = None
+                object_idx = None
+                object_target_ids = None
             
-            if out_objects['anything_to_feed']:
-                refine_logits, refine_out = model.refine_obj_seg(outputs, out_objects, cuda_targets[0]['calib'])
-                  
-                out_objects['refine_out'] = refine_out
-        if targets[0]['obj_exists']:
-            object_inter_dict, object_idx, object_target_ids = criterion.get_object_interpolated(outputs, cuda_targets, match_object_indices)
-        else:
-            object_inter_dict = None
-            object_idx = None
-            object_target_ids = None
-        
-        try:
-            confusion.update(out_objects, None,object_idx, targets[0],  static=False)
-        except Exception as e:
-             logging.error('EXCEPTION IN CONFUSION ')
-             logging.error(str(e))
-             continue
+            try:
+                confusion.update(out_objects, None,object_idx, targets[0],  static=False)
+            except Exception as e:
+                 logging.error('EXCEPTION IN CONFUSION ')
+                 logging.error(str(e))
+                 continue
       
         if targets[0]['obj_exists']:
             vis_tools.save_results_eval(seq_images.cpu().numpy(), out,out_objects, targets, static_inter_dict, object_inter_dict, static_target_ids, object_target_ids, config)

@@ -74,6 +74,8 @@ def train(dataloader,dataset, model, criterion, optimiser,refiner_optimiser, pos
             temp_dict['mask'] = b['mask'].cuda()
             temp_dict['bev_mask'] = b['bev_mask'].cuda()
             
+        
+        
             temp_dict['obj_corners'] = b['obj_corners'].cuda()
             temp_dict['obj_converted'] = b['obj_converted'].cuda()
             temp_dict['obj_exists'] = b['obj_exists'].cuda()
@@ -154,24 +156,26 @@ def train(dataloader,dataset, model, criterion, optimiser,refiner_optimiser, pos
         if iteration % config.stats_interval == 0:
 
             threshed_outputs = model.thresh_and_assoc_estimates(outputs,thresh=0.5)
-            base_postprocessed, object_post = postprocessors['bbox'](threshed_outputs,torch.Tensor(np.tile(np.expand_dims(np.array(config.patch_size),axis=0),[seq_images.shape[0],1])).cuda(),objects=True)
+            base_postprocessed, object_post = postprocessors['bbox'](threshed_outputs,torch.Tensor(np.tile(np.expand_dims(np.array(config.patch_size),axis=0),[seq_images.shape[0],1])).cuda(),objects=args.objects)
     
             out = vis_tools.get_selected_estimates(base_postprocessed , thresh = 0.5)
-            out_objects = vis_tools.get_selected_objects(object_post , thresh = 0.5)
+            if args.objects:
+                out_objects = vis_tools.get_selected_objects(object_post , thresh = 0.5)
             
             hausdorff_static_dist, hausdorff_static_idx, hausdorff_gt = vis_tools.hausdorff_match(out[0], targets[0])
             match_static_indices, match_object_indices = criterion.matcher(outputs, cuda_targets)
             if args.object_refinement:
 
                 out_objects['refine_out'] = refine_out
-
-            if targets[0]['obj_exists']:
-                object_inter_dict, object_idx, object_target_ids = criterion.get_object_interpolated(outputs, cuda_targets, match_object_indices)
-                confusion.update(out_objects, None,object_idx, targets[0],  static=False)
-            else:
-                object_inter_dict = None
-                object_idx = None
-                object_target_ids = None
+                
+            if args.objects:
+                if targets[0]['obj_exists']:
+                    object_inter_dict, object_idx, object_target_ids = criterion.get_object_interpolated(outputs, cuda_targets, match_object_indices)
+                    confusion.update(out_objects, None,object_idx, targets[0],  static=False)
+                else:
+                    object_inter_dict = None
+                    object_idx = None
+                    object_target_ids = None
             try:
                 confusion.update(out[0], hausdorff_gt, hausdorff_static_idx,   targets[0],   static=True)
                 
@@ -188,14 +192,18 @@ def train(dataloader,dataset, model, criterion, optimiser,refiner_optimiser, pos
             
             static_inter_dict, static_idx, static_target_ids = criterion.get_interpolated(matched_static_outputs, cuda_targets, match_static_indices)
                 
-            
-            if targets[0]['obj_exists']:
-                object_inter_dict, object_idx, object_target_ids = criterion.get_object_interpolated(threshed_outputs, cuda_targets, match_object_indices)
-                
-                if args.object_refinement:
+            if args.objects:
+                if targets[0]['obj_exists']:
+                    object_inter_dict, object_idx, object_target_ids = criterion.get_object_interpolated(threshed_outputs, cuda_targets, match_object_indices)
                     
-                    object_inter_dict['refine_out'] = refine_out
-                vis_tools.save_results_train(seq_images.cpu().numpy(), out,out_objects, targets, static_inter_dict, object_inter_dict, static_target_ids, object_target_ids, config)
+                    if args.object_refinement:
+                        
+                        object_inter_dict['refine_out'] = refine_out
+                    vis_tools.save_results_train(seq_images.cpu().numpy(), out,out_objects, targets, static_inter_dict, object_inter_dict, static_target_ids, object_target_ids, config)
+                else:
+                    vis_tools.save_results_train(seq_images.cpu().numpy(), out,out_objects, targets, static_inter_dict,None, static_target_ids, None, config)
+            
+            
             else:
                 vis_tools.save_results_train(seq_images.cpu().numpy(), out,out_objects, targets, static_inter_dict,None, static_target_ids, None, config)
                 
@@ -308,7 +316,7 @@ def evaluate(dataloader, model, criterion, postprocessors, confusion, config,arg
      
         outputs = model.thresh_and_assoc_estimates(outputs,thresh=static_thresh)
         
-        base_postprocessed, object_post = postprocessors['bbox'](outputs,torch.Tensor(np.tile(np.expand_dims(np.array(config.patch_size),axis=0),[seq_images.shape[0],1])).cuda(),objects=True)
+        base_postprocessed, object_post = postprocessors['bbox'](outputs,torch.Tensor(np.tile(np.expand_dims(np.array(config.patch_size),axis=0),[seq_images.shape[0],1])).cuda(),objects=args.objects)
         
         out = vis_tools.get_selected_estimates(base_postprocessed , thresh = static_thresh)
         
@@ -326,24 +334,24 @@ def evaluate(dataloader, model, criterion, postprocessors, confusion, config,arg
         '''
         OBJECT
         '''
-
-        out_objects = vis_tools.get_selected_objects(object_post , thresh = object_thresh)
-        if args.object_refinement:
+        if args.objects:
+            out_objects = vis_tools.get_selected_objects(object_post , thresh = object_thresh)
+            if args.object_refinement:
+                
+                if out_objects['anything_to_feed']:
+                    refine_logits, refine_out = model.refine_obj_seg(outputs, out_objects, cuda_targets[0]['calib'])
+                      
+                    out_objects['refine_out'] = refine_out
+            if targets[0]['obj_exists']:
+                object_inter_dict, object_idx, object_target_ids = criterion.get_object_interpolated(outputs, cuda_targets, match_object_indices)
+            else:
+                object_inter_dict = None
+                object_idx = None
+                object_target_ids = None
             
-            if out_objects['anything_to_feed']:
-                refine_logits, refine_out = model.refine_obj_seg(outputs, out_objects, cuda_targets[0]['calib'])
-                  
-                out_objects['refine_out'] = refine_out
-        if targets[0]['obj_exists']:
-            object_inter_dict, object_idx, object_target_ids = criterion.get_object_interpolated(outputs, cuda_targets, match_object_indices)
-        else:
-            object_inter_dict = None
-            object_idx = None
-            object_target_ids = None
-        
-      
-        confusion.update(out_objects, None,object_idx, targets[0],  static=False)
-            
+          
+            confusion.update(out_objects, None,object_idx, targets[0],  static=False)
+                
       
 #        if targets[0]['obj_exists']:
 #            vis_tools.save_results_eval(seq_images.cpu().numpy(), out,out_objects, targets, static_inter_dict, object_inter_dict, static_target_ids, object_target_ids, config)
